@@ -44,5 +44,27 @@ class CRM_Ibanodoosync_Definition extends CRM_Odoosync_Model_ObjectDefinition im
     return $dep;
   }
   
+  public function getCiviCRMEntityDataById($id) {
+    $table = $this->config->getIbanCustomGroupValue('table_name');
+    $ibanField = $this->config->getIbanCustomFieldValue('column_name');
+    $bicField = $this->config->getBicContributionCustomFieldValue('column_name');
+    $ibanFieldId = $this->config->getIbanCustomFieldValue('id');
+    $bicFieldId = $this->config->getBicContributionCustomFieldValue('id');
+    
+    $sql = "SELECT * FROM `".$table."` WHERE `id` = %1";
+    $dao = CRM_Core_DAO::executeQuery($sql, array(1 => array($id, 'Integer')));
+    $data = array();
+    if ($dao->fetch()) {
+      $data['contact_id'] = $dao->entity_id;
+      $data['id'] = $dao->id;
+      $data['custom_'.$ibanFieldId] = $dao->$ibanField;
+      $data['custom_'.$bicFieldId] = $dao->$bicField;
+      
+      return $data;
+    }
+    
+    throw new Exception('Could not find Iban data for syncing into Odoo');
+  }
+  
 }
 

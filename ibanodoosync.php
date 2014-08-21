@@ -31,8 +31,6 @@ function ibanodoosync_civicrm_custom($op,$groupID, $entityID, &$params ) {
   if ($groupID == $config->getIbanCustomGroupValue('id')) {
     //group is the IBAN account
     //add the iban account for syncing
-    
-    $objectRef = array();
     if ($op == 'delete') {
       //when deleting the params contains the id
       $objectId = $params;
@@ -47,17 +45,11 @@ function ibanodoosync_civicrm_custom($op,$groupID, $entityID, &$params ) {
       $contact = civicrm_api3('Contact', 'getsingle', $contactParams);
       //extract the custom value table id
       $objectId = $contact[$config->getIbanCustomGroupValue('table_name').'_id'];
-      //create an object
-      foreach($contact as $key => $value) {
-        $objectRef[$key] = $value;
-      }
-      $objectRef['contact_id'] = $entityID;
     }
-    
-    $objectRef['id'] = $objectId;
+
     
     $objects = CRM_Odoosync_Objectlist::singleton();
-    $objects->post($op,$config->getIbanCustomGroupValue('table_name'), $objectId, $objectRef);
+    $objects->post($op,$config->getIbanCustomGroupValue('table_name'), $objectId);
   }
 }
 
