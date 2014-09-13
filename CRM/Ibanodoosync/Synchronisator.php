@@ -35,7 +35,6 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
     if ($odoo_id) {
       return $odoo_id;
     }
-    echo $this->connector->getLastResponseMessage(); exit();
     throw new Exception('Could not insert bank account into Odoo');
   }
   
@@ -51,6 +50,13 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       return $odoo_id;
     }
     throw new Exception("Could not update bank account in Odoo");
+  }
+  
+  public function getSyncData(\CRM_Odoosync_Model_OdooEntity $sync_entity, $odoo_id) {
+    $data = $this->getIban($sync_entity->getEntityId());
+    $odoo_partner_id = $sync_entity->findOdooIdByEntity('civicrm_contact', $data['contact_id']);
+    $parameters = $this->getOdooParameters($data, $odoo_partner_id, $sync_entity->getEntity(), $sync_entity->getEntityId(), 'create');
+    return $parameters;
   }
   
   /**
