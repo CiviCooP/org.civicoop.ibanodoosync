@@ -47,7 +47,7 @@ class CRM_Ibanodoosync_Definition extends CRM_Odoosync_Model_ObjectDefinition im
   public function getCiviCRMEntityDataById($id) {
     $table = $this->config->getIbanCustomGroupValue('table_name');
     $ibanField = $this->config->getIbanCustomFieldValue('column_name');
-    $bicField = $this->config->getBicContributionCustomFieldValue('column_name');
+    $bicField = $this->config->getBicCustomFieldValue('column_name');
     
     $sql = "SELECT * FROM `".$table."` WHERE `id` = %1";
     $dao = CRM_Core_DAO::executeQuery($sql, array(1 => array($id, 'Integer')));
