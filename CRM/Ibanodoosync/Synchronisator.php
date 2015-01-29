@@ -136,9 +136,11 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
     if ($dao->fetch()) {
       $iban_field = $this->config->getIbanCustomFieldValue('column_name');
       $bic_field = $this->config->getBicCustomFieldValue('column_name');
+      $tnv_field = $this->config->getTnvCustomFieldValue('column_name');
       $data['contact_id'] = $dao->entity_id;
       $data['iban'] = $dao->$iban_field;
       $data['bic'] = $dao->$bic_field;
+      $data['tnv'] = $dao->$tnv_field;
     }
     return $data;
   }
@@ -154,6 +156,7 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       'acc_number' => new xmlrpcval($data['iban'], 'string'),
       'partner_id' => new xmlrpcval($odoo_partner_id, 'int'),
       'bank_bic' => new xmlrpcval($data['bic'], 'string'),
+      'bank_name' => new xmlrpcval($data['tnv'], 'string'),
       'state' => new xmlrpcval('bank', 'string'),
     );
     
