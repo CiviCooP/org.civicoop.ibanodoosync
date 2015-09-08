@@ -80,7 +80,7 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
         
     $key = array(
       new xmlrpcval(array(
-        new xmlrpcval('partner_id', 'string'),
+        new xmlrpcval('partner_id.id', 'string'),
         new xmlrpcval('=', 'string'),
         new xmlrpcval($odoo_partner_id, 'int'),
       ), "array"),
@@ -99,7 +99,7 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
 
     $key = array(
       new xmlrpcval(array(
-        new xmlrpcval('partner_id', 'string'),
+        new xmlrpcval('partner_id.id', 'string'),
         new xmlrpcval('=', 'string'),
         new xmlrpcval($odoo_partner_id, 'int'),
       ), "array"),
