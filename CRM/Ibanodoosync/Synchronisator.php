@@ -87,7 +87,7 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       new xmlrpcval(array(
         new xmlrpcval('iban', 'string'),
         new xmlrpcval('=', 'string'),
-        new xmlrpcval($data['iban'], 'int'),
+        new xmlrpcval($data['iban'], 'string'),
       ), "array")
     );
     
@@ -106,7 +106,7 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       new xmlrpcval(array(
         new xmlrpcval('acc_number', 'string'),
         new xmlrpcval('=', 'string'),
-        new xmlrpcval($data['iban'], 'int'),
+        new xmlrpcval($data['iban'], 'string'),
       ), "array")
     );
 
