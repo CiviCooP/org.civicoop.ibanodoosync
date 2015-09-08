@@ -91,11 +91,57 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       ), "array")
     );
     
-    
     $result = $this->connector->search($this->getOdooResourceType(), $key);
     foreach($result as $id_element) {
-        $id = $id_element->scalarval();
+      $id = $id_element->scalarval();
+      return $id;
     }
+
+    $key = array(
+      new xmlrpcval(array(
+        new xmlrpcval('partner_id', 'string'),
+        new xmlrpcval('=', 'string'),
+        new xmlrpcval($odoo_partner_id, 'int'),
+      ), "array"),
+      new xmlrpcval(array(
+        new xmlrpcval('acc_number', 'string'),
+        new xmlrpcval('=', 'string'),
+        new xmlrpcval($data['iban'], 'int'),
+      ), "array")
+    );
+
+    $result = $this->connector->search($this->getOdooResourceType(), $key);
+    foreach($result as $id_element) {
+      $id = $id_element->scalarval();
+      return $id;
+    }
+
+    return false;
+  }
+
+  /**
+   * Find item in Odoo and return odoo_id
+   *
+   */
+  protected function findBankId($bic) {
+    if (empty($bic)) {
+      return false;
+    }
+
+    $key = array(
+      new xmlrpcval(array(
+        new xmlrpcval('bic', 'string'),
+        new xmlrpcval('=', 'string'),
+        new xmlrpcval($bic, 'string'),
+      ), "array")
+    );
+
+    $result = $this->connector->search('res.bank', $key);
+    foreach($result as $id_element) {
+      $id = $id_element->scalarval();
+      return $id;
+    }
+
     return false;
   }
   
@@ -139,9 +185,11 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       $tnv_field = $this->config->getTnvCustomFieldValue('column_name');
       $data['contact_id'] = $dao->entity_id;
       $data['iban'] = $dao->$iban_field;
+      $data['acc_number'] = $dao->$iban_field;
       $data['bic'] = $dao->$bic_field;
       $data['tnv'] = $dao->$tnv_field;
     }
+
     return $data;
   }
   
@@ -159,6 +207,13 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       'owner_name' => new xmlrpcval($data['tnv'], 'string'),
       'state' => new xmlrpcval('bank', 'string'),
     );
+
+    if ($data['bic']) {
+      $bank_id = $this->findBankId($data['bic']);
+      if ($bank_id) {
+        $parameters['bank'] = new xmlrpcval($bank_id, 'int');
+      }
+    }
     
     $this->alterOdooParameters($parameters, $this->getOdooResourceType(), $entity, $entity_id, $action);
     
