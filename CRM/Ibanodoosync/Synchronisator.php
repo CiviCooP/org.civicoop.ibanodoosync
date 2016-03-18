@@ -205,7 +205,7 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
       'partner_id' => new xmlrpcval($odoo_partner_id, 'int'),
       'bank_bic' => new xmlrpcval($data['bic'], 'string'),
       'owner_name' => new xmlrpcval($data['tnv'], 'string'),
-      'state' => new xmlrpcval('bank', 'string'),
+      'state' => new xmlrpcval('iban', 'string'),
     );
 
     if ($data['bic']) {
