@@ -20,6 +20,11 @@ class CRM_Ibanodoosync_Synchronisator extends CRM_Odoosync_Model_ObjectSynchroni
    * subclasses should implement this function to make items syncable
    */
   public function isThisItemSyncable(CRM_Odoosync_Model_OdooEntity $sync_entity) {
+    $data = $this->getIban($sync_entity->getEntityId());
+    $odoo_partner_id = $sync_entity->findOdooIdByEntity('civicrm_contact', $data['contact_id']);
+    if ($odoo_partner_id <= 0) {
+      return false;
+    }
     return true;
   }
   

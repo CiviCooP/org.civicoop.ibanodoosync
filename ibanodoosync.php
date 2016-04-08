@@ -16,6 +16,23 @@ function ibanodoosync_civicrm_odoo_object_definition(&$list) {
   $list[$table_name] = new CRM_Ibanodoosync_Definition();
 }
 
+/**
+ * Implementation of hook_civicrm_odoo_object_definition_dependency().
+ */
+function ibanodoosync_civicrm_odoo_object_definition_dependency(&$dependencies, CRM_Odoosync_Model_ObjectDefinition $def, $entity_id, $action, $data=false) {
+  if (!_ibanodoosync_check_reqiurements()) {
+    return;
+  }
+
+  if ($def instanceof CRM_OdooContactSync_ContactDefinition && $action != 'DELETE') {
+    $iban_accounts = CRM_Ibanaccounts_Ibanaccounts::IBANForContact($entity_id);
+    $config = CRM_Ibanaccounts_Config::singleton();
+    foreach($iban_accounts as $iban) {
+      $dependencies[] = new CRM_Odoosync_Model_Dependency($config->getIbanCustomGroupValue('table_name'), $iban['id'], +1, true);
+    }
+  }
+}
+
 /** 
  * Implementation of hook_civicrm_custom
  * 
