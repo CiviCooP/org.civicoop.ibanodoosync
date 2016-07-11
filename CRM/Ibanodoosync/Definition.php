@@ -18,7 +18,11 @@ class CRM_Ibanodoosync_Definition extends CRM_Odoosync_Model_ObjectDefinition im
     }
     return false;
   }
-  
+
+  public function getWeight($action) {
+    return -90;
+  }
+
   public function getName() {
     return $this->config->getIbanCustomGroupValue('table_name');
   }
