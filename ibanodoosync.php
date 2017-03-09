@@ -77,7 +77,7 @@ function _ibanodoosync_check_reqiurements() {
   $error = false;
   $requiredExtensions = array('org.civicoop.odoosync', 'org.civicoop.ibanaccounts');
   try {
-    $extensions = civicrm_api3('Extension', 'get');  
+    $extensions = civicrm_api3('Extension', 'get', array('options' => array('limit' => false)));
     foreach($extensions['values'] as $ext) {
       if ($ext['status'] == 'installed') {
         if (in_array($ext['key'], $requiredExtensions)) {
