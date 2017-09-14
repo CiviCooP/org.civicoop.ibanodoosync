@@ -1,0 +1,12 @@
+{
+  "name": "civicoop/org.civicoop.ibanodoosync",
+  "description": "Synchronize IBAN accounts into Odoo. Requires the org.civicoop.ibanaccounts and the org.civicoop.odoosync extensions",
+  "type": "civicrm-module",
+  "authors": [
+    {
+      "name": "Jaap Jansma",
+      "email": "helpdesk@civicoop.org"
+    }
+  ],
+  "license": "AGPL-3.0"
+}
